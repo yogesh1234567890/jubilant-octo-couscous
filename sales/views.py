@@ -161,6 +161,7 @@ class existing_sales_create(LoginRequiredMixin, SuccessMessageMixin, CreateView)
 
 class SalesReturnView(LoginRequiredMixin,DetailView,CreateView):
     model = Sales
+    fields='__all__'
     template_name = 'sales/sales_return_update.html'
 
     def get_context_data(self, **kwargs):
@@ -174,3 +175,27 @@ class SalesReturnView(LoginRequiredMixin,DetailView,CreateView):
     #     initial=super(SalesReturnView,self).get_initial()
     #     initial['customer']=Customer.objects.get(pk=self.kwargs['pk'])
     #     return initial
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        items = context['items']
+        with transaction.atomic():
+            if items.is_valid():
+                items.instance = form.save(commit=False)
+                for i in items:
+                    prod = i.cleaned_data['product']
+                    product=prod.product
+                    print(prod)
+                    qt=i.cleaned_data['quantity']
+                    sold_item=Product.objects.get(product=product)
+                    if sold_item.Quantity < qt:
+                        form.errors['value']='Your entered quantity exceeds inventory quantity'
+                        return self.form_invalid(form)
+                    else:
+                        sold_item.Quantity +=qt
+                        sold_item.save()
+                        form.save()
+                        items.save()
+                # sold_item.save()
+
+        return super(SalesReturnView, self).form_valid(form)
