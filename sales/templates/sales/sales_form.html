@@ -55,7 +55,7 @@
 			    </tr>
 			    </thead>
 			{% endif %}
-			<tbody >
+			<tbody class="tbody-class">
 			<tr class="formset_row" >
 			    {% for field in form.visible_fields %}
 				<td>
@@ -98,10 +98,19 @@
 <script src="{% static 'dist/js/formset/jquery.formset.js' %}"></script>
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>-->
 <script>
+
+$('.formset_row').formset({
+        deleteText: 'remove',
+        prefix: 'items'
+
+    });
+
 		let birdForm = document.querySelectorAll(".formset_row")
         let container = document.querySelector("#form-container")
         let addButton = document.querySelector("#add-form")
         let totalForms = document.querySelector("#id_salesitem_set-TOTAL_FORMS")
+		let tbody=document.querySelector('.tbody-class')
+		document.querySelector('.add-row').style.display="none";
 
 
         let formNum = birdForm.length-1
@@ -113,8 +122,9 @@
             let formRegex = RegExp(`salesitem_set-(\\d){1}-`,'g')
             formNum++
             newForm.innerHTML = newForm.innerHTML.replace(formRegex, `salesitem_set-${formNum}-`)
-            container.insertBefore(newForm, addButton)
+			tbody.appendChild(newForm)
             totalForms.setAttribute('value', `${formNum+1}`)
+
         }
 
 </script>

@@ -21,14 +21,3 @@ class SaleItemForm(ModelForm):
 
 
 SaleItemFormset=inlineformset_factory(Sales,SalesItem, form=SaleItemForm,extra=1, max_num=Product.objects.count())
-
-
-'''    $('.formset_row').formset({
-		addText: '<button class="btn btn-warning">Add item </button>',
-        deleteText: 'Remove',
-        prefix: 'items'
-    });
-
-$('select').select2()
-
-'''
