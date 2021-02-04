@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load widget_tweaks %}
-
 {% block content-header %}
 <div class="card-header">
     <div class="card-tools">
@@ -32,8 +31,6 @@
                 <tbody>
 
                     {% for saleitem in sales.salesitem_set.all %}
-
-
                     <tr>
                         <td>{{ saleitem.product }}</td>
                         <td>{{saleitem.quantity}}</td>
@@ -46,7 +43,7 @@
     <div class='col-sm-6 card'>
         <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            {% for field in items %}
+            {% for field in form %}
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label" for="{{ field.auto_id }}">
                     {{ field.label }}
@@ -59,7 +56,7 @@
                 </label>
 
                 <div id="form-container" class="col-sm-9">
-                    {{ field }}
+                    {{ field | add_class:"form-control" }}
                     {% if field.help_text %}
                     <small>{{ field.help_text|safe }}</small>
                     {% endif %}

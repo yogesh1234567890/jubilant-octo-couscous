@@ -67,7 +67,7 @@ class SalesCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     #     if sales_form.is_valid():
     #         new_sale = sales_form.save(commit=False)
     #         new_sale.save()
-    #         # To keep track of the stock remaining after sales
+
     #         # sold_quantity = int(request.POST['quantity'])
     #         # sold_item.Quantity -= sold_quantity
     #         # sold_item.save()
@@ -141,7 +141,6 @@ class existing_sales_create(LoginRequiredMixin, SuccessMessageMixin, CreateView)
                 for i in items:
                     prod = i.cleaned_data['product']
                     product=prod.product
-                    print(prod)
                     qt=i.cleaned_data['quantity']
                     sold_item=Product.objects.get(product=product)
                     if sold_item.Quantity > qt:
@@ -159,7 +158,7 @@ class existing_sales_create(LoginRequiredMixin, SuccessMessageMixin, CreateView)
         initial['customer'] = Customer.objects.get(pk=self.kwargs['pk'])
         return initial
 
-class SalesReturnView(LoginRequiredMixin,DetailView,CreateView):
+class SalesReturnView(LoginRequiredMixin,DetailView,UpdateView):
     model = Sales
     fields='__all__'
     template_name = 'sales/sales_return_update.html'
@@ -171,13 +170,14 @@ class SalesReturnView(LoginRequiredMixin,DetailView,CreateView):
         else:
             data['items'] = SaleItemFormset()
         return data
-    # def get_initial(self):
-    #     initial=super(SalesReturnView,self).get_initial()
-    #     initial['customer']=Customer.objects.get(pk=self.kwargs['pk'])
-    #     return initial
 
     def form_valid(self, form):
         context = self.get_context_data()
+
+        name=context['object']
+        name_id=Customer.objects.get(name=name)
+        print(name_id.id)
+
         items = context['items']
         with transaction.atomic():
             if items.is_valid():
@@ -185,7 +185,6 @@ class SalesReturnView(LoginRequiredMixin,DetailView,CreateView):
                 for i in items:
                     prod = i.cleaned_data['product']
                     product=prod.product
-                    print(prod)
                     qt=i.cleaned_data['quantity']
                     sold_item=Product.objects.get(product=product)
                     if sold_item.Quantity < qt:
@@ -194,8 +193,10 @@ class SalesReturnView(LoginRequiredMixin,DetailView,CreateView):
                     else:
                         sold_item.Quantity +=qt
                         sold_item.save()
-                        form.save()
-                        items.save()
+
+
+                        # form.save()
+                        # items.save()
                 # sold_item.save()
 
         return super(SalesReturnView, self).form_valid(form)
