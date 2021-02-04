@@ -4,9 +4,9 @@ from .views import inventory_list, ProductDeleteView, ProductDetailView, Product
 
 urlpatterns = [
   path('list', inventory_list, name='inventory_list'),
-  path('<uuid:pk>/', ProductDetailView.as_view(), name='product-detail'),
-  path('<uuid:pk>/update/', ProductUpdateView.as_view(), name='product-update'),
-  path('delete/<uuid:pk>/', ProductDeleteView.as_view(), name='product-delete'),
+  path('<int:pk>/', ProductDetailView.as_view(), name='product-detail'),
+  path('<int:pk>/update/', ProductUpdateView.as_view(), name='product-update'),
+  path('delete/<int:pk>/', ProductDeleteView.as_view(), name='product-delete'),
 
   path('create/', ProductCreateView.as_view(), name='product-create'),
   path('upload/', ProductBulkUploadView.as_view(), name='product-upload'),

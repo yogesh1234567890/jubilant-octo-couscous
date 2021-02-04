@@ -4,11 +4,9 @@ import uuid
 from supplier.models import Supplier
 
 class Product(models.Model):
-    id=models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     product_code=models.CharField(max_length=40, null=True, blank=True)
     product = models.CharField(max_length=200)
     Quantity = models.FloatField(max_length=100,default=0,null=True, blank=True)
-    # unit=models.CharField(max_length=50,choices=CHOICES, default='none', blank=True,null=True)
     purchase_price = models.FloatField(null=True, blank=True)
     sale_price = models.FloatField(null=True, blank=True)
     supplier=models.ForeignKey(Supplier,null=True,blank=True, on_delete=models.CASCADE)
