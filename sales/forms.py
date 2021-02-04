@@ -20,4 +20,4 @@ class SaleItemForm(ModelForm):
         fields=['product','quantity']
 
 
-SaleItemFormset=inlineformset_factory(Sales,SalesItem, form=SaleItemForm,extra=1, max_num=Product.objects.count())
+SaleItemFormset=inlineformset_factory(Sales,SalesItem, form=SaleItemForm,extra=1)
