@@ -35,25 +35,25 @@ class SalesCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     def form_valid(self, form):
         context = self.get_context_data()
         items = context['items']
+        data={}
         with transaction.atomic():
             if items.is_valid():
                 items.instance = form.save(commit=False)
                 for i in items:
                     prod = i.cleaned_data['product']
                     product=prod.product
-                    print(prod)
                     qt=i.cleaned_data['quantity']
                     sold_item=Product.objects.get(product=product)
                     if sold_item.Quantity < qt:
                         form.errors['value']='Your entered quantity exceeds inventory quantity'
                         return self.form_invalid(form)
                     else:
+                        data[product] =qt
+                        print(data)
                         sold_item.Quantity -=qt
                         sold_item.save()
                         form.save()
                         items.save()
-                # sold_item.save()
-
         return super(SalesCreateView, self).form_valid(form)
 
     def get_initial(self):
@@ -173,7 +173,6 @@ class SalesReturnView(LoginRequiredMixin,DetailView,UpdateView):
 
     def form_valid(self, form):
         context = self.get_context_data()
-
         name=context['object']
         name_id=Customer.objects.get(name=name)
         sales_id=Sales.objects.get(customer_id=name_id)
@@ -185,20 +184,11 @@ class SalesReturnView(LoginRequiredMixin,DetailView,UpdateView):
                     prod = i.cleaned_data['product']
                     qt=i.cleaned_data['quantity']
                     product=prod.product
-                    print(prod.id)
-                    print('............')
                     sales_item_id = SalesItem.objects.filter(sales_id_id=sales_id, product_id=prod.id)
                     for i in sales_item_id:
-                        print(i.total_price)
                         i.quantity -= qt
                         i.save()
                         sold_item=Product.objects.get(product=product)
                         sold_item.Quantity +=qt
                         sold_item.save()
-
-
-                        # form.save()
-                        # items.save()
-                # sold_item.save()
-
         return super(SalesReturnView, self).form_valid(form)
