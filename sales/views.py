@@ -176,21 +176,23 @@ class SalesReturnView(LoginRequiredMixin,DetailView,UpdateView):
 
         name=context['object']
         name_id=Customer.objects.get(name=name)
-        print(name_id.id)
-
+        sales_id=Sales.objects.get(customer_id=name_id)
         items = context['items']
         with transaction.atomic():
             if items.is_valid():
                 items.instance = form.save(commit=False)
                 for i in items:
                     prod = i.cleaned_data['product']
-                    product=prod.product
                     qt=i.cleaned_data['quantity']
-                    sold_item=Product.objects.get(product=product)
-                    if sold_item.Quantity < qt:
-                        form.errors['value']='Your entered quantity exceeds inventory quantity'
-                        return self.form_invalid(form)
-                    else:
+                    product=prod.product
+                    print(prod.id)
+                    print('............')
+                    sales_item_id = SalesItem.objects.filter(sales_id_id=sales_id, product_id=prod.id)
+                    for i in sales_item_id:
+                        print(i.total_price)
+                        i.quantity -= qt
+                        i.save()
+                        sold_item=Product.objects.get(product=product)
                         sold_item.Quantity +=qt
                         sold_item.save()
 
