@@ -5,7 +5,7 @@ from supplier.models import Supplier
 
 class Product(models.Model):
     product_code=models.CharField(max_length=40, null=True, blank=True)
-    product = models.CharField(max_length=200)
+    product = models.CharField(max_length=200,null=False)
     Quantity = models.IntegerField(default=0,null=True, blank=True)
     purchase_price = models.FloatField(null=True, blank=True)
     sale_price = models.FloatField(null=True, blank=True)
