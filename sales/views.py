@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic import DetailView
+from django.views.generic import DetailView,ListView
 from django.forms import widgets
 from django.forms import inlineformset_factory
 from django.db import transaction
@@ -18,7 +18,7 @@ def sales_list(request):
     sales=Sales.objects.all().order_by('-id')
     return render(request,'sales/sales_list.html',{'sales':sales})
 
-class SalesCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class SalesCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView, ListView):
     model = Sales
     template_name = "sales/sales_form.html"
     fields = '__all__'
@@ -26,6 +26,7 @@ class SalesCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         data = super(SalesCreateView, self).get_context_data(**kwargs)
+        data['product'] = Product.objects.all()
         if self.request.POST:
             data['items'] = SaleItemFormset(self.request.POST)
         else:
@@ -35,7 +36,6 @@ class SalesCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     def form_valid(self, form):
         context = self.get_context_data()
         items = context['items']
-        data={}
         with transaction.atomic():
             if items.is_valid():
                 items.instance = form.save(commit=False)
@@ -48,8 +48,6 @@ class SalesCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
                         form.errors['value']='Your entered quantity exceeds inventory quantity'
                         return self.form_invalid(form)
                     else:
-                        data[product] =qt
-                        print(data)
                         sold_item.Quantity -=qt
                         sold_item.save()
                         form.save()
@@ -60,18 +58,6 @@ class SalesCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         initial=super(SalesCreateView,self).get_initial()
         initial['customer']=Customer.objects.get(pk=self.kwargs['pk'])
         return initial
-    #
-    # def post(self, request, pk):
-    #     # sold_item = Product.objects.get(id=pk)
-    #     sales_form = SaleItemFormset(request.POST)
-    #     if sales_form.is_valid():
-    #         new_sale = sales_form.save(commit=False)
-    #         new_sale.save()
-
-    #         # sold_quantity = int(request.POST['quantity'])
-    #         # sold_item.Quantity -= sold_quantity
-    #         # sold_item.save()
-    #         return redirect('sales-list')b265p0lm
 
 class CustomerAddView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Customer
