@@ -119,6 +119,7 @@
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>-->
 <script>
 
+
     $('.formset_row').formset({
         deleteText: 'remove',
         prefix: 'items'
@@ -146,7 +147,8 @@
         totalForms.setAttribute('value', `${formNum + 1}`)
 
     }
-
+    var value=$("#id_salesitem_set-0-product option:selected").val();
+    console.log(value);
 </script>
 
 {% endblock morejs %}

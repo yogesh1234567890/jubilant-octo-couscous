@@ -77,23 +77,23 @@ WSGI_APPLICATION = 'school_app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
 DATABASES = {
-    "default": {
-        "ENGINE" : "django.db.backends.postgresql_psycopg2",
-        "NAME":"d3ca6408lrtasl",
-        "HOST":"ec2-18-204-101-137.compute-1.amazonaws.com",
-        "USER":"sonjmnjmnijjtk",
-        "PASSWORD":"d125947b5ebf11248712e1c856d6e0864cae676ed46ce6f5c5a35782c62047dc",
-        'OPTIONS': {'sslmode': 'require'},
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE" : "django.db.backends.postgresql_psycopg2",
+#         "NAME":"d3ca6408lrtasl",
+#         "HOST":"ec2-18-204-101-137.compute-1.amazonaws.com",
+#         "USER":"sonjmnjmnijjtk",
+#         "PASSWORD":"d125947b5ebf11248712e1c856d6e0864cae676ed46ce6f5c5a35782c62047dc",
+#         'OPTIONS': {'sslmode': 'require'},
+#     }
+# }
 
 
 # Password validation

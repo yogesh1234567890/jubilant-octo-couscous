@@ -18,7 +18,9 @@
       <tbody>
 
         {% for sale in sales %}
-          <tr class='clickable-row' data-href="{% url 'sales-return' sale.id %}">
+        <!-- <tr class='clickable-row' data-href="{% url 'sales-return' sale.id %}"> -->
+
+          <tr class='clickable-row' data-href="{% url 'salesreturn' sale.id %}">
             <td>{{ forloop.counter}}</td>
             <td>{{ sale.customer}}</td>
             <td>{{ sale.date}}</td>

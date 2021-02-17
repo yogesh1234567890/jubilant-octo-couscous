@@ -25,12 +25,14 @@ class SalesCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView, ListV
     success_message = "New sales successfully added."
 
     def get_context_data(self, **kwargs):
+        self.object_list=self.get_queryset()
         data = super(SalesCreateView, self).get_context_data(**kwargs)
-        data['product'] = Product.objects.all()
         if self.request.POST:
             data['items'] = SaleItemFormset(self.request.POST)
         else:
             data['items'] = SaleItemFormset()
+            data['product'] = Product.objects.all()
+
         return data
 
     def form_valid(self, form):
@@ -104,19 +106,24 @@ def existing_customer_list(request):
     return render(request,'sales/existing_customer.html',{'sales':sales})
 
 
-class existing_sales_create(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class existing_sales_create(LoginRequiredMixin, SuccessMessageMixin, CreateView, ListView):
     model = Sales
     template_name = "sales/sales_form.html"
     fields = '__all__'
     success_message = "New sales successfully added."
 
     def get_context_data(self, **kwargs):
+        self.object_list=self.get_queryset()
+
         data = super(existing_sales_create, self).get_context_data(**kwargs)
         if self.request.POST:
             data['items'] = SaleItemFormset(self.request.POST)
         else:
             data['items'] = SaleItemFormset()
+            data['product'] = Product.objects.all()
         return data
+    # def get_queryset(self):
+    #     data=self.get_context_data()
 
     def form_valid(self, form):
         context = self.get_context_data()
@@ -159,6 +166,7 @@ class SalesReturnView(LoginRequiredMixin,DetailView,UpdateView):
 
     def form_valid(self, form):
         context = self.get_context_data()
+        print(context)
         name=context['object']
         name_id=Customer.objects.get(name=name)
         sales_id=Sales.objects.get(customer_id=name_id)
@@ -178,3 +186,21 @@ class SalesReturnView(LoginRequiredMixin,DetailView,UpdateView):
                         sold_item.Quantity +=qt
                         sold_item.save()
         return super(SalesReturnView, self).form_valid(form)
+
+
+
+def load_products(request,pk):
+    prod = SalesItem.objects.filter(sales_id=pk).all()
+    return render(request, 'sales/product_dropdown_list_options.html',  {'prod': prod})
+
+class sales_return_view(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    model = salesReturn
+    template_name = "sales/sales_return1.html"
+    fields = '__all__'
+    success_message = "New sales successfully added."
+    context_object_name='yogsh'
+
+    def get_initial(self):
+        initial=super(sales_return_view,self).get_initial()
+        initial['sales_return_id']=Customer.objects.get(pk=self.kwargs['pk'])
+        return initial

@@ -102,3 +102,12 @@ class SalesItem(models.Model):
         self.total_price=self.get_price_total
         super(SalesItem, self).save(*args,**kwargs)
 
+
+class salesReturn(models.Model):
+    class Meta:
+        verbose_name_plural='sales_return'
+    sales_return_id=models.ForeignKey(Sales, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
+    
+

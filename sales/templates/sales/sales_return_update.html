@@ -41,7 +41,7 @@
         </div>
     </div>
     <div class='col-sm-6 card'>
-        <form action="" method="POST" enctype="multipart/form-data">
+        <form action="" method="POST" enctype="multipart/form-data" id="productForm" data-cities-url="{% url 'ajax_load_products' sales.id %}">
             {% csrf_token %}
             {% for field in form %}
             <div class="form-group row">
@@ -116,9 +116,10 @@
 
 {% block morejs %}
 <script src="{% static 'dist/js/formset/jquery.formset.js' %}"></script>
+<!--<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>-->
+
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>-->
 <script>
-
     $('.formset_row').formset({
         deleteText: 'remove',
         prefix: 'items'
@@ -147,6 +148,22 @@
 
     }
 
+
+<!--$("#id_customer").change(function () {-->
+<!--        const url = $("#productForm").attr("data-cities-url");-->
+<!--        const productId = $(this).val();-->
+
+<!--        $.ajax({-->
+<!--            url: url,-->
+<!--            data: {-->
+<!--                'country_id': productId-->
+<!--            success: function (data) {-->
+<!--                $("#id_salesitem_set-0-product").html(data);-->
+
+<!--            }-->
+<!--        });-->
+
+<!--    });-->
 </script>
 
 {% endblock morejs %}
