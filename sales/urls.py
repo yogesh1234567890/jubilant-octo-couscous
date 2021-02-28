@@ -10,8 +10,10 @@ path('<int:sales_id>/update/', SalesUpdateView, name='sales-update'),
 path('return/',sales_return_list,name='sales-return-list'),
 path('existing/',existing_customer_list,name='existing-customer-list'),
 path('exist/create/<int:pk>',existing_sales_create.as_view(),name='existing-sales-create'),
-path('<int:pk>/return/',SalesReturnView.as_view(),name='sales-return'),
-path('ajax/load-products',load_products, name='ajax_load_products'),  # AJAX
-path('sales-return/<int:pk>/',sales_return_view.as_view(),name='salesreturn'),
+# path('ajax/load-products/',load_products, name='ajax_load_products'),  # AJAX
+path('sales-return/<int:pk>/',sales_return_view,name='salesreturn'),
+path('payment//<int:pk>',PaymentView.as_view(),name='payment-create'),
+
+
 
 ]

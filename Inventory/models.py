@@ -19,7 +19,7 @@ class Product(models.Model):
         return f' {self.product} '
 
     def get_absolute_url(self):
-        return reverse('product-detail', kwargs={'pk': self.pk})
+        return reverse('inventory_list')
 
 
 class ProductBulkUpload(models.Model):

@@ -4,6 +4,7 @@ from django.urls import reverse
 from random import randrange
 import uuid
 from Inventory.models import *
+from django.core.validators import MinValueValidator
 
 CHARSET='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 LENGTH=10
@@ -25,16 +26,6 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.name
-
-    # def get_absolute_url(self):
-    #     return reverse('sale-form',kwargs={'pk':self.pk})
-
-    # @property
-    # def get_price_total(self):
-    #     quantity=self.quantity
-    #     price = self.product.sale_price
-    #     total_price=quantity*price
-    #     return total_price
 
     def save(self,*args,**kwargs):
         # self.total_price=self.get_price_total
@@ -77,8 +68,12 @@ class Sales(models.Model):
         return total_qty
 
 
+    # def get_absolute_url(self):
+    #     return reverse('sales_details', kwargs={'pk': self.pk})
+
+
     def get_absolute_url(self):
-        return reverse('sales_details', kwargs={'pk': self.pk})
+        return reverse('payment-create',kwargs={'pk': self.pk})
 
 
 class SalesItem(models.Model):
@@ -86,7 +81,7 @@ class SalesItem(models.Model):
         verbose_name_plural='salesitem'
     sales_id=models.ForeignKey(Sales, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=0)
+    quantity = models.IntegerField(default=0, validators= [MinValueValidator(0)])
     total_price = models.FloatField(null=True, blank=True)
 
     def __str__(self):
@@ -103,11 +98,45 @@ class SalesItem(models.Model):
         super(SalesItem, self).save(*args,**kwargs)
 
 
+
+class Payment(models.Model):
+    choices=(
+        ('FullyPaid','Fully paid'),
+        ('PartiallyPaid','Partially paid'),
+        ('NotPaid','Not Paid')
+
+    )
+    payment=(
+        ('cash','Cash'),
+        ('card','Card'),
+        ('Online','Online')
+
+    )
+    class Meta:
+        verbose_name_plural='Payments'
+    sales_id=models.ForeignKey(Sales,on_delete=models.CASCADE)
+    total_amt=models.FloatField()
+    status=models.CharField(choices=choices,max_length=200)
+    mode=models.CharField(choices=payment,max_length=200)
+
+    def get_absolute_url(self):
+        return reverse('sales_details', kwargs={'pk': self.pk})
+
+
+
 class salesReturn(models.Model):
     class Meta:
         verbose_name_plural='sales_return'
     sales_return_id=models.ForeignKey(Sales, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=0)
+    quantity = models.IntegerField(default=0, validators= [MinValueValidator(0)])
+
+    def __str__(self):
+        return str(self.sales_return_id)
+
+    def get_absolute_url(self):
+        return reverse('existing-customer-list')
+
     
+
 

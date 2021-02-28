@@ -9,6 +9,7 @@ class SalesModel(admin.ModelAdmin):
 admin.site.register(Sales, SalesModel)
 admin.site.register(SalesItem)
 admin.site.register(salesReturn)
+admin.site.register(Payment)
 
 
 class CustomerAdmin(admin.ModelAdmin):
