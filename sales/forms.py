@@ -48,3 +48,11 @@ SaleItemReturnFormset=modelformset_factory(salesReturn,form=SalesReturnForm,extr
 #     def __init__(self, *args, **kwargs):
 #         super(PaymentForm, self).__init__(*args, **kwargs)
 #         self.fields['status'].widget = forms.RadioSelect()
+
+class PaymentForm(forms.Form):
+    sales_id = forms.CharField(widget=forms.HiddenInput())
+    total_amt = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control'
+    }))
+    status = forms.CharField(widget=forms.RadioSelect())
+    # mode

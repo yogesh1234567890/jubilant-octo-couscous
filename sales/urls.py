@@ -12,7 +12,9 @@ path('existing/',existing_customer_list,name='existing-customer-list'),
 path('exist/create/<int:pk>',existing_sales_create.as_view(),name='existing-sales-create'),
 # path('ajax/load-products/',load_products, name='ajax_load_products'),  # AJAX
 path('sales-return/<int:pk>/',sales_return_view,name='salesreturn'),
-path('payment//<int:pk>',PaymentView.as_view(),name='payment-create'),
+path('payment/<int:pk>',PaymentView.as_view(),name='payment-create'),
+path('payment/',PaymentView1.as_view(),name='payment-create1'),
+
 
 
 

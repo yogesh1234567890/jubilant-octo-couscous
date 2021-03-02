@@ -202,4 +202,23 @@ class PaymentView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         initial=super(PaymentView,self).get_initial()
         initial['sales_id']=Sales.objects.get(pk=self.kwargs['pk'])
         return initial
-    
+
+    def get_context_data(self, **kwargs):
+        data = super(PaymentView, self).get_context_data(**kwargs)
+        data['prods']=Sales.objects.get(pk=self.kwargs['pk'])
+        return data
+
+
+class PaymentView1(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    model = Payment
+    template_name = "sales/payment_form.html"
+    fields = '__all__'
+    success_message = "New sales successfully added."
+
+    def get_context_data(self, **kwargs):
+        print
+        context = super(PaymentView1, self).get_context_data(**kwargs)
+        context['items'] = PaymentForm()
+        # context['prods']= Sales.objects.get(id=self.kwargs['pk'])
+        return context
+

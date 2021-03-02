@@ -102,21 +102,19 @@ class SalesItem(models.Model):
 class Payment(models.Model):
     choices=(
         ('FullyPaid','Fully paid'),
-        ('PartiallyPaid','Partially paid'),
-        ('NotPaid','Not Paid')
-
+        ('PartiallyPaid','Partially paid')
     )
     payment=(
         ('cash','Cash'),
-        ('card','Card'),
-        ('Online','Online')
+        # ('card','Card'),
+        # ('Online','Online')
 
     )
     class Meta:
         verbose_name_plural='Payments'
     sales_id=models.ForeignKey(Sales,on_delete=models.CASCADE)
     total_amt=models.FloatField()
-    status=models.CharField(choices=choices,max_length=200)
+    status=models.CharField(choices=choices, max_length=200)
     mode=models.CharField(choices=payment,max_length=200)
 
     def get_absolute_url(self):
