@@ -117,6 +117,9 @@ class Payment(models.Model):
     status=models.CharField(choices=choices, max_length=200)
     mode=models.CharField(choices=payment,max_length=200)
 
+    # def __str__(self):
+    #     return self.sales_id
+
     def get_absolute_url(self):
         return reverse('sales_details', kwargs={'pk': self.pk})
 

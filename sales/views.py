@@ -12,7 +12,7 @@ from django.forms import inlineformset_factory
 from django.db import transaction
 from django.urls import reverse_lazy
 from Inventory.models import *
-from .models import Sales, SalesItem, salesReturn
+from .models import Customer, Payment, Sales, SalesItem, salesReturn
 from .forms import *
 from django.views.decorators.csrf import csrf_exempt
 
@@ -78,6 +78,8 @@ class SalesDetail(LoginRequiredMixin,DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(SalesDetail, self).get_context_data(**kwargs)
+        context['payment']=Payment.objects.get(sales_id_id=self.kwargs['pk'])
+        print(context['payment'])
         return context
 
 def SalesUpdateView(request, sales_id):

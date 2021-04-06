@@ -1,8 +1,8 @@
 from django.forms import ModelForm, inlineformset_factory,modelformset_factory
-from django import forms
-from .models import *
+from django.forms import ModelForm, inlineformset_factory,modelformset_factory
 from Inventory.models import Product
-
+from django import forms
+from sales.models import Customer,Sales,SalesItem,salesReturn
 
 class CustomerForm(ModelForm):
     class Meta:
@@ -50,9 +50,15 @@ SaleItemReturnFormset=modelformset_factory(salesReturn,form=SalesReturnForm,extr
 #         self.fields['status'].widget = forms.RadioSelect()
 
 class PaymentForm(forms.Form):
+    choices=(
+        ('FullyPaid','Fully paid'),
+        ('PartiallyPaid','Partially paid')
+    )
     sales_id = forms.CharField(widget=forms.HiddenInput())
     total_amt = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control'
     }))
-    status = forms.CharField(widget=forms.RadioSelect())
+    status = forms.ChoiceField(choices=choices)
+    colors = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=choices)
+
     # mode

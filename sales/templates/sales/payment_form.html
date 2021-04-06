@@ -88,6 +88,16 @@
     <input type="submit" class="btn btn-primary" value="Add Payment">
   {% endif %}
 </form>
+{{items.as_p}}
+{% for radio in items.status %}
+<div class="myradio">
+  <label for="{{ radio.id_for_label }}">
+    {{ radio.choice_label }}
+    <span class="radio">{{ radio.tag }}</span>
+</label>
+
+</div>
+{% endfor %}
 </div>
 </div>
 
@@ -100,16 +110,16 @@ $('#id_total_amt').keyup(function(){
   var total=+$('#id_total').text();
   if (newpaid > total){
    $('#id_status option[value=""]').attr('selected', true)
-    return alert("Please check the total price on the side");
+    alert("Please check the total price on the side");
   }
   else if(newpaid === total){
     var status=$('#id_status');
     console.log(status[0][1].text);
     let options= document.querySelectorAll('#id_status option');
     console.log(options);
-    return $('#id_status option[value="FullyPaid"]').attr('selected', true)
+    $('#id_status option[value="FullyPaid"]').attr('selected', true)
   }
-  return $('#id_status option[value="PartiallyPaid"]').attr('selected', true)
+  $('#id_status option[value="PartiallyPaid"]').attr('selected', true)
 }
 );
 
